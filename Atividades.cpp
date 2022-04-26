@@ -103,11 +103,29 @@ void questao5()
     string numString = std::to_string(num);
     cout << "O número " << numString << " será convertido da base decimal para a base " << base << "!" << endl;
 
-    string arr[100];
-    cout << sizeof(arr);
+    int arr[100] = {};
+    
+    quotient = num;
+
+    int i = 0;
+    while (quotient > base)
+    {
+        arr[i] = quotient % base;
+        quotient = quotient/base;
+        cout << quotient << " / " << base << " = " << quotient/base << " - Resto: " << arr[i] << endl;
+        i++;
+    }
+
+    arr[i] = quotient;
+    string arrString;
+    for (int j: arr) {
+        arrString.push_back(j + '0');
+    }
+
+    std::reverse(arrString.begin(), arrString.end());
 
     cout << "Resultado: "
-         << "result" << endl;
+         << arrString << endl;
 
     cout << "Retornando para o início do programa...\n"
          << endl;
@@ -124,7 +142,7 @@ void questao6()
 int main()
 {
     cout << "---------------- Questoes - Lista 1 ----------------" << endl << endl;
-    
+
     int questao;
 
     while (questao != 4 || questao != 5 || questao != 6)
