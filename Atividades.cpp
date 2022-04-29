@@ -5,110 +5,21 @@
 #include <cmath>
 #include <typeinfo>
 #include <sstream>
+#include "Conversor.hpp"
+#include "Writer.hpp"
 using namespace std;
-
-int converterParaDecimal(int base, int num)
-{
-
-    int result = 0;
-    stringstream ss;
-
-    string numString = std::to_string(num);
-    cout << "O número " << numString << " será convertido da base " << base << " para a base decimal!" << endl;
-
-    std::reverse(numString.begin(), numString.end());
-
-    string length = to_string(numString.length());
-
-    for (unsigned int i = stoi(length); i > 0; i--)
-    {
-        int intValue;
-        char numStringChar = numString.at(i - 1);
-
-        intValue = numStringChar - '0';
-
-        int sum = intValue * pow(base, i - 1);
-
-        if (i - 1 > 0)
-        {
-            cout << intValue << " x " << base << "^" << i - 1 << " = " << sum << endl;
-        }
-        else
-        {
-            cout << intValue << " x " << base << "^" << i - 1 << " = " << sum << " + " << endl;
-        }
-
-        result += sum;
-    }
-
-    return result;
-}
-
-string converterParaBase(int base, int num)
-{
-    int quotient = 0;
-    stringstream ss;
-
-    string numString = std::to_string(num);
-    cout << "O número " << numString << " será convertido da base decimal para a base " << base << "!" << endl;
-
-    int arr[100] = {};
-
-    quotient = num;
-
-    int i = 0;
-    while (quotient >= base)
-    {
-        arr[i] = quotient % base;
-        cout << quotient << " / " << base << " = " << quotient / base << " - Resto: " << arr[i] << endl;
-        quotient = quotient / base;
-        i++;
-    }
-    cout << "-----> Quociente final: " << quotient << endl;
-
-    arr[i] = quotient;
-    string arrString;
-    for (int j : arr)
-    {
-        arrString.push_back(j + '0');
-    }
-    arrString = arrString.substr(0, i + 1);
-    std::reverse(arrString.begin(), arrString.end());
-
-    return arrString;
-}
 
 void questao4()
 {
     int base = 0;
-    int num = 0;
+    string num;
     int result;
-    while (!(base > 0))
-    {
-        cout << "Insira uma base numérica: " << endl;
-        cout << "Base: ";
-        cin >> base;
-        cout << endl;
-        if (base < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
-    while (!(num > 0))
-    {
-        cout << "Insira um número positivo a ser convertido para decimal:" << endl;
-        cout << "Número: ";
-        cin >> num;
-        cout << endl;
-        if (num < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
 
-    result = converterParaDecimal(base, num);
+    base = Writer::getBase(base);
+
+    num = Writer::getNum(num);
+
+    result = Conversor::converterParaDecimal(base, num);
 
     cout << "Resultado: " << result << endl;
 
@@ -119,35 +30,13 @@ void questao4()
 void questao5()
 {
     int base = 0;
-    int num = 0;
+    string num;
     string arrString;
 
-    while (!(num > 0))
-    {
-        cout << "Insira um número decimal a ser convertido para a base desejada:" << endl;
-        cout << "Número: ";
-        cin >> num;
-        cout << endl;
-        if (num < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
-    while (!(base > 0))
-    {
-        cout << "Insira uma base numérica: " << endl;
-        cout << "Base: ";
-        cin >> base;
-        cout << endl;
-        if (base < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
+    num = Writer::getNum(num, "Insira um número decimal a ser convertido para a base desejada:");
+    base = Writer::getBase(base);
 
-    arrString = converterParaBase(base, num);
+    arrString = Conversor::converterParaBase(base, num);
 
     cout << "Resultado: "
          << arrString << endl;
@@ -159,67 +48,19 @@ void questao6()
 {
     int base1 = 0;
     int base2 = 0;
-    int num = 0;
+    string num;
     int quotient = 0;
     int decimalValue = 0;
     string result;
 
-    while (!(num > 0))
-    {
-        cout << "Insira um número a ser convertido para outra base numerica:" << endl;
-        cout << "Número: ";
-        cin >> num;
-        cout << endl;
-        if (num < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
-    while (!(base1 > 0))
-    {
-        cout << "Insira a base numérica desse numero:" << endl;
-        cout << "Base Inicial: ";
-        cin >> base1;
-        cout << endl;
-        if (base1 < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
-    }
-    while (!(base2 > 0))
-    {
-        cout << "Insira a base numérica de destino:" << endl;
-        cout << "Base Final: ";
-        cin >> base2;
-        cout << endl;
-        if (base2 < 0)
-        {
-            cout << "O número inserido é negativo, tente novamente" << endl;
-            continue;
-        }
+    num = Writer::getNum(num, "Insira um número a ser convertido para outra base numerica:");
+    base1 = Writer::getBase(base1, "Insira a base numérica desse numero:");
+    base2 = Writer::getBase(base2, "Insira a base numérica de destino:");
 
-        if (base1 == base2)
-        {
-            base2 = 0;
-            cout << "Pra que rodar o programa se voce ja tem o valor na base desejada? Tente novamente com outro valor." << endl;
-            continue;
-        }
-    }
+    decimalValue = Conversor::converterParaDecimal(base1, num);
 
-    if (base1 == 10)
-    {
-        decimalValue = num;
-    }
-    if (base2 == 10)
-    {
-        result = decimalValue + "";
-    }
-    else
-    {
-        result = converterParaBase(base2, decimalValue);
-    }
+    result = Conversor::converterParaBase(base2, std::to_string(decimalValue));
+
     cout << "Resultado:" << endl;
 
     cout << "O numero " << num << ", na base " << base1 << " se equivale ao numero " << result << " na base " << base2 << "."
@@ -229,38 +70,72 @@ void questao6()
          << endl;
 }
 
-int main()
+void lista2()
 {
-    cout << "---------------- Questoes - Lista 1 ----------------" << endl
+    cout << "---------------- Questao 1 - Lista 2 ----------------" << endl
          << endl;
 
-    int questao;
+    string num;
+    string resultBase2;
+    string resultBase8;
+    string resultBase16;
 
-    while (questao != 4 || questao != 5 || questao != 6)
+    num = Writer::getNum(num, "Insira um número decimal para iniciar as conversões:");
+    resultBase2 = Conversor::converterParaBase(2, num);
+    resultBase8 = Conversor::converterParaBase(8, num);
+    resultBase16 = Conversor::converterParaBase(16, num);
+
+    cout << "Resultado: " << endl;
+    cout << "Número inicial: " << num << endl;
+    cout << "Base 2: " << resultBase2 << endl;
+    cout << "Base 8: " << resultBase8 << endl;
+    cout << "Base 16: " << resultBase16 << endl;
+
+    cout << "Retornando para o início do programa...\n"
+         << endl;
+}
+
+int main()
+{
+    while (true)
     {
-        cout << "Selecione o numero da questao para testar o programa." << endl;
-        cout << "Opçoes:" << endl;
-        cout << "4" << endl;
-        cout << "5" << endl;
-        cout << "6" << endl;
-        cout << "Questao: ";
-        cin >> questao;
-        cout << endl;
+        int lista;
 
-        switch (questao)
+        cout << "Selecione a lista de exercicios." << endl;
+        cin >> lista;
+        if (lista == 2)
+            lista2();
+        else
         {
-        case 4:
-            questao4();
-            break;
-        case 5:
-            questao5();
-            break;
-        case 6:
-            questao6();
-            break;
-        default:
-            cout << "Opçao invalida!" << endl;
-            break;
+            cout << "---------------- Questoes - Lista 1 ----------------" << endl
+                 << endl;
+
+            int questao;
+
+            cout << "Selecione o numero da questao para testar o programa." << endl;
+            cout << "Opçoes:" << endl;
+            cout << "4" << endl;
+            cout << "5" << endl;
+            cout << "6" << endl;
+            cout << "Questao: ";
+            cin >> questao;
+            cout << endl;
+
+            switch (questao)
+            {
+            case 4:
+                questao4();
+                break;
+            case 5:
+                questao5();
+                break;
+            case 6:
+                questao6();
+                break;
+            default:
+                cout << "Opçao invalida!" << endl;
+                break;
+            }
         }
     }
 }
